@@ -4,7 +4,7 @@ from time import time
 import numpy as np
 from numpy.linalg import norm
 from collections import Counter
-import KDNode
+from .KDNode import KDNode
 
 Counter([0, 1, 1, 2, 2, 3, 3, 4, 3, 3]).most_common(1)
 
