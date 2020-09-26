@@ -99,40 +99,135 @@ class KDTree(object):
         self.y_vaild = False if y is None else True
         self.creat(X, y)
 
-
-
-def create(self, X, y = None):
-    """
-    构建KD树
-    :param X:输入特征集，n_samples * n_features
-    :param y:l * n_samples
-    :return: KDNode
-    """
-    def create_(X, axis, parent = None):
+    def create(self, X, y=None):
         """
-        递归生成kd树
-        :param X: 合并标签后输入集
-        :param anxi: 切分轴
-        :param parent: 父节点
+        构建KD树
+        :param X:输入特征集，n_samples * n_features
+        :param y:l * n_samples
         :return: KDNode
         """
-        n_samples = np.shape(X)[0]
-        if n_samples == 0:
-            return None
-        mid = n_samples >> 1
-        partition_sort(X, mid, key=lambda x: x[axis])
-        if self.y_vaild:
-            kd_node = KDNode(X[mid][:-1], X[mid][-1], axis = axis, parent=parent)
-        else:
-            kd_node = KDNode(X[mid], axis=axis, parent=parent)
-        next_axis = (axis + 1) % k_dimensions
-        kd_node.left = create_(X[:mid], next_axis, kd_node)
-        kd_node.right = create_(X[mid +1:], next_axis, kd_node)
-        return  kd_node
-    print('building kd-tree...')
-    k_dimensions = np.shape(X)[1]
-    if y is not None:
-        X = np.hstack((np.array(X), np.array([y]).T)).tolist()
-    self.root = create_(X, 0)
 
-    
+        def create_(X, axis, parent=None):
+            """
+            递归生成kd树
+            :param X: 合并标签后输入集
+            :param anxi: 切分轴
+            :param parent: 父节点
+            :return: KDNode
+            """
+            n_samples = np.shape(X)[0]
+            if n_samples == 0:
+                return None
+            mid = n_samples >> 1
+            partition_sort(X, mid, key=lambda x: x[axis])
+            if self.y_vaild:
+                kd_node = KDNode(X[mid][:-1], X[mid][-1], axis=axis, parent=parent)
+            else:
+                kd_node = KDNode(X[mid], axis=axis, parent=parent)
+            next_axis = (axis + 1) % k_dimensions
+            kd_node.left = create_(X[:mid], next_axis, kd_node)
+            kd_node.right = create_(X[mid + 1:], next_axis, kd_node)
+            return kd_node
+
+        print('building kd-tree...')
+        k_dimensions = np.shape(X)[1]
+        if y is not None:
+            X = np.hstack((np.array(X), np.array([y]).T)).tolist()
+        self.root = create_(X, 0)
+
+    def search_knn_(self, point, k, dist=None):
+        """
+        kd树中搜索k个最近邻样本
+        :param point: 样本点
+        :param dist: 度量方式
+        :return:
+        """
+
+        def search_knn_(kd_node):
+            """
+            搜索k近邻节点
+            :param kd_node:KDNode
+            :return:
+            """
+            if kd_node is None:
+                return
+            data = kd_node.data
+            distance = p_dist(data)
+            if len(heap) < k:
+                # 向大根堆插入新元素
+                max_heappush(heap, (kd_node, distance))
+            elif distance < heap[0][1]:
+                # 替换大根堆堆顶元素
+                max_heapreplace(heap, (kd_node, distance))
+            axis = kd_node.axis
+            if abs(point[axis] - data[axis]) < heap[0][1] or len(heap) < k:
+                # 当分割最小球体与分割超平面相交或堆中元素小于K个
+                search_knn_(kd_node.left)
+                search_knn_(kd_node.right)
+            elif point[axis] < data[axis]:
+                search_knn_(kd_node.left)
+            else:
+                search_knn_(kd_node.right)
+
+        if self.root is None:
+            raise Exception("kd_tree must be null.")
+        if k < 1:
+            raise ValueError("k must be greater than 0.")
+        # 默认使用2个范式度量距离
+        if dist is None:
+            p_dist = lambda x: norm(np.array(x) - np.array(point))
+        else:
+            p_dist = lambda x: dist(x, point)
+        heap = []
+        search_knn_(self.root)
+        return sorted(heap, key=lambda x: x[1])
+
+    def search__nn(self, point, dist=None):
+        """
+        搜索point在样本中的最近邻
+        :param self:
+        :param point:
+        :param dist:
+        :return:
+        """
+        return self.search_knn(point, 1, dist)[0]
+
+    def pre_order(self, root=KDNode()):
+        """先序遍历"""
+        if root is None:
+            return
+        elif root.data is None:
+            root = self.root
+        yield root
+        for x in self.pre_order(root.left):
+            yield x
+        for x in self.pre_order(root.right):
+            yield x
+
+    def lev_order(self, root = KDNode(), queue = None):
+        """层次遍历"""
+        if root is None:
+            return
+        elif root.data is None:
+            root = self.root
+        if queue is None:
+            queue = []
+        yield root
+        if root.left:
+            queue.append(root.left)
+        if root.right:
+            queue.append(root.right)
+        if queue:
+            for x in self.lev_order(queue.pop(0), queue):
+                yield x
+
+    @classmethod
+    def height(cls,root):
+        """kd树深度"""
+        if root is None:
+            return 0
+        else:
+            return max(cls.height(root.left),cls.height(root.right)) + 1
+
+
+
