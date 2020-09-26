@@ -229,5 +229,21 @@ class KDTree(object):
         else:
             return max(cls.height(root.left),cls.height(root.right)) + 1
 
+class KNeighborsClassifier(object):
+    """K近邻分类器"""
 
+    def __init__(self, k, dist = None):
+        """K近邻分类器"""
+        self.k = k
+        self.dist = dist
+        self.kd_tree = None
+
+    def fit(self, X, y):
+        """构建kd树"""
+        print("fitting....")
+        X = self._data_processing(X)
+        self.kd_tree = KDTree(X, y)
+
+    def predict(self,X):
+         """预测分类"""
 
