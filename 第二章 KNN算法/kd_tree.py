@@ -6,6 +6,7 @@ from numpy.linalg import norm
 from collections import Counter
 from .KDNode import KDNode
 
+
 Counter([0, 1, 1, 2, 2, 3, 3, 4, 3, 3]).most_common(1)
 
 def partition_sort(arr,k,key = lambda x : x):
@@ -85,3 +86,53 @@ def max_heappush(heap,new_code,key = lambda x: x[1]):
     heap[pos] = new_code
 
 
+class KDTree(object):
+    """kd树"""
+
+    def __init__(self, X, y=None):
+        """
+        构造函数
+        :param X:输入特征集，n_samples * n_features
+        :param y:l * n_samples
+        """
+        self.root = None
+        self.y_vaild = False if y is None else True
+        self.creat(X, y)
+
+
+
+def create(self, X, y = None):
+    """
+    构建KD树
+    :param X:输入特征集，n_samples * n_features
+    :param y:l * n_samples
+    :return: KDNode
+    """
+    def create_(X, axis, parent = None):
+        """
+        递归生成kd树
+        :param X: 合并标签后输入集
+        :param anxi: 切分轴
+        :param parent: 父节点
+        :return: KDNode
+        """
+        n_samples = np.shape(X)[0]
+        if n_samples == 0:
+            return None
+        mid = n_samples >> 1
+        partition_sort(X, mid, key=lambda x: x[axis])
+        if self.y_vaild:
+            kd_node = KDNode(X[mid][:-1], X[mid][-1], axis = axis, parent=parent)
+        else:
+            kd_node = KDNode(X[mid], axis=axis, parent=parent)
+        next_axis = (axis + 1) % k_dimensions
+        kd_node.left = create_(X[:mid], next_axis, kd_node)
+        kd_node.right = create_(X[mid +1:], next_axis, kd_node)
+        return  kd_node
+    print('building kd-tree...')
+    k_dimensions = np.shape(X)[1]
+    if y is not None:
+        X = np.hstack((np.array(X), np.array([y]).T)).tolist()
+    self.root = create_(X, 0)
+
+    
