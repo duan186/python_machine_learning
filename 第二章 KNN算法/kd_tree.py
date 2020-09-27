@@ -19,7 +19,7 @@ def partition_sort(arr, k, key=lambda x: x):
     start, end = 0, len(arr) - 1
     assert 0 <= k <= end
     while True:
-        i, j, pivot = start, end, deepcopy(arr(start))
+        i, j, pivot = start, end, deepcopy(arr[start])
         while i < j:
             # 从右向左查找最小元素
             while i < j and key(pivot) <= key(arr[j]):
@@ -56,7 +56,7 @@ def max_heapreplace(heap, new_code, key=lambda x: x[1]):
     root, child = 0, 1
     end = len(heap) - 1
     while child <= end:
-        if child < end and key(heap[child] < key(heap[child + 1])):
+        if child < end and key(heap[child]) < key(heap[child + 1]):
             child += 1
         if key(heap[child]) <= key(new_code):
             break
@@ -116,7 +116,7 @@ class KDTree(object):
         """
         self.root = None
         self.y_vaild = False if y is None else True
-        self.creat(X, y)
+        self.create(X, y)
 
     def create(self, X, y=None):
         """
@@ -140,9 +140,9 @@ class KDTree(object):
             mid = n_samples >> 1
             partition_sort(X, mid, key=lambda x: x[axis])
             if self.y_vaild:
-                kd_node = KDNode(X[mid][:-1], X[mid][-1], axis=axis, parent=parent)
+                kd_node = KDNode(X[mid][:-1], X[mid][-1], axis=axis)
             else:
-                kd_node = KDNode(X[mid], axis=axis, parent=parent)
+                kd_node = KDNode(X[mid], axis=axis)
             next_axis = (axis + 1) % k_dimensions
             kd_node.left = create_(X[:mid], next_axis, kd_node)
             kd_node.right = create_(X[mid + 1:], next_axis, kd_node)
@@ -154,7 +154,7 @@ class KDTree(object):
             X = np.hstack((np.array(X), np.array([y]).T)).tolist()
         self.root = create_(X, 0)
 
-    def search_knn_(self, point, k, dist=None):
+    def search_knn(self, point, k, dist=None):
         """
         kd树中搜索k个最近邻样本
         :param point: 样本点
@@ -300,9 +300,9 @@ if __name__ == '__main__':
     kd_tree = KDTree(X)
 
     for x in X[:10]:
-        resl = ([list(node[0].data) for node in kd_tree.search_knn_(x, 20)])
+        resl = ([list(node[0].data) for node in kd_tree.search_knn(x, 20)])
         distances = norm(np.array(X) - np.array(x), axis=1)
-        res2 = ([list(X[i]) for _, i in sorted(zip(distances, range[N]))[:20]])
+        res2 = ([list(X[i]) for _, i in sorted(zip(distances, range(N)))[:20]])
         if all(x in res2 for x in resl):
             print('correct ^_^^_^')
         else:
