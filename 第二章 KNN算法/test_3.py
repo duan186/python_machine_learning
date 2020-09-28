@@ -1,11 +1,9 @@
 from numpy import *
 import operator
-
 def createDataSet():
     group = array([[1.0, 1.1], [2.0, 2.0], [0, 0], [4.1, 5.1]])
     labels = ['A', 'B', 'C', 'D']
     return group, labels
-
 
 def classify0(inX, dataSet, labels, k):
     """
@@ -27,11 +25,9 @@ def classify0(inX, dataSet, labels, k):
         classCount[voteIlabel] = classCount.get(voteIlabel, 0) + 1  # 在字典中将该类型加一
     sortedClassCount = sorted(classCount.items(), key=operator.itemgetter(1), reverse=True)  # reverse = True代表降序
     return sortedClassCount[0][0]  # 排序并返回出现最多的那个类型
-
-
 #测试
 group,labels = createDataSet()
-print(classify0([0, 0], group, labels, 3))
-print(classify0([1, 2], group, labels, 3))
-print(classify0([3, 3], group, labels, 3))
-print(classify0([5, 5], group, labels, 3))
+print(classify0([0,0],group,labels,3))
+print(classify0([1,2],group,labels,3))
+print(classify0([3,3],group,labels,3))
+print(classify0([5,5],group,labels,3))
