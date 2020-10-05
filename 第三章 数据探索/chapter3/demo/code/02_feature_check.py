@@ -156,7 +156,6 @@ plt.show()
 # 代码3-9 餐饮销量数据相关性分析
 
 # 餐饮销量数据相关性分析
-from __future__ import print_function
 import pandas as pd
 
 catering_sale = '../data/catering_sale_all.xls'  # 餐饮数据，含有其他属性
