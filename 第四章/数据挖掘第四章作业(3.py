@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
-datafile = '/Users/wangduan/python_machine_learning/数据挖掘/chapter4/data/discretization_data.xls'
+datafile = '/Users/wangduan/python_machine_learning/数据挖掘/data/discretization_data.xls'
 data = pd.read_excel(datafile)
 data = data[u'肝气郁结证型系数'].copy()
 k = 4
@@ -31,6 +31,6 @@ def cluster_plot(d, k):
     return plt
 
 
-cluster_plot(d1, k).show()
+cluster_plot(d1, k).show( )
 cluster_plot(d2, k).show()
 cluster_plot(d3, k).show()
