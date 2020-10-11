@@ -31,6 +31,6 @@ def cluster_plot(d, k):
     return plt
 
 
-cluster_plot(d1, k).show( )
+cluster_plot(d1, k).show()
 cluster_plot(d2, k).show()
 cluster_plot(d3, k).show()
