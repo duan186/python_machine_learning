@@ -4,9 +4,8 @@
 import pandas as pd
 
 # 参数初始化
-inputfile = '../data/principal_component.xls'
-outputfile = '../tmp/dimention_reducted.xls'  # 降维后的数据
-
+inputfile = '/Users/wangduan/python_machine_learning/数据挖掘/data/principal_component.xls'
+outputfile = '/Users/wangduan/python_machine_learning/数据挖掘/dimention_reducted.xls'  # 降维后的数据
 data = pd.read_excel(inputfile, header = None)  # 读入数据
 
 from sklearn.decomposition import PCA
