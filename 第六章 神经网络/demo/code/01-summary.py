@@ -5,7 +5,7 @@
 import numpy as np
 import pandas as pd
 
-inputfile = '../data/data.csv' # 输入的数据文件
+inputfile = 'D:/教育/python_machine_learning/第六章 神经网络/test/data/data.csv' # 输入的数据文件
 data = pd.read_csv(inputfile) # 读取数据
 
 # 描述性统计分析

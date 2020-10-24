@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import sys
-sys.path.append('../code')  # 设置路径
+sys.path.append('D:/教育/python_machine_learning/第六章 神经网络/test/code')  # 设置路径
 import numpy as np
 import pandas as pd
 from GM11 import GM11  # 引入自编的灰色预测函数

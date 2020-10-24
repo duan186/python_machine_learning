@@ -15,7 +15,8 @@ print('相关系数非零个数为：',np.sum(lasso.coef_ != 0))  # 计算相关
 mask = lasso.coef_ != 0  # 返回一个相关系数是否为零的布尔数组
 print('相关系数是否为零：',mask)
 
-outputfile ='D:/教育/python_machine_learning/第六章 神经网络/test/tmp/new_reg_data.csv'  # 输出的数据文件
+outputfile ='D:/教育/python_machine_learning/new_reg_data.csv'  # 输出的数据文件
+mask = np.append(mask,True)
 new_reg_data = data.iloc[:, mask]  # 返回相关系数非零的数据
 new_reg_data.to_csv(outputfile)  # 存储数据
 print('输出数据的维度为：',new_reg_data.shape)  # 查看输出数据的维度

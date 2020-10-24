@@ -8,7 +8,7 @@ from sklearn.svm import LinearSVR
 inputfile = '../tmp/new_reg_data_GM11.xls'  # 灰色预测后保存的路径
 data = pd.read_excel(inputfile)  # 读取数据
 feature = ['x1', 'x3', 'x4', 'x5', 'x6', 'x7', 'x8', 'x13']  # 属性所在列
-data_train = data.loc[range(1994,2014)].copy()  # 取2014年前的数据建模
+data_train = data.iloc[range(1994,2014)].copy()  # 取2014年前的数据建模
 data_mean = data_train.mean()
 data_std = data_train.std()
 data_train = (data_train - data_mean)/data_std  # 数据标准化
