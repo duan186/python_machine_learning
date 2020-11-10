@@ -1,9 +1,8 @@
 # 利用函数_thread模块实现线程
 import _thread
 import time
-
-
 # 为线程定义一个函数
+
 def print_time(threadName, delay):
     count = 0
     while count < 5:
